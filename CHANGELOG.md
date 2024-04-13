@@ -1,6 +1,9 @@
 ## PurrSoftware Plugin Change Log <a id="meander-change-log"></a>
 ## Significant Version Changes (Changelog)
 
+### V2.0.34 (Apr 2024)
+- This is a major bug fix for my modules that was causing performance problems for users in the browser.
+
 ### V2.0.33 (Jan 2024)
 - This is a cosmetic update only for Meander, ModeScaleProgressions and ModeScaleQuant that corrects how circle of 5th manual triggering from within the circle for circle positions that are not in the range I-VII are displayed on panel text.  Previously they were inappropriately designating the chords as inversions.  Regardless of the display, these circle positions do not result in sound when triggered manually.
 
