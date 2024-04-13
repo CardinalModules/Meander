@@ -8208,42 +8208,47 @@ struct MeanderWidget : ModuleWidget
 	   
 		double smoothedDt=.016;  // start out at 1/60
 		int numZeroes=0;
+		bool doPNGpanel=true;
 		
-		void draw(const DrawArgs &args) override 
+		void draw(const DrawArgs &args) override    
 		{   
 		 	if (!module)  // if there is no module, draw the static panel image, i.e., in the browser
 			{
-				nvgBeginPath(args.vg);
-				nvgRect(args.vg, 0.0, 0.0, box.size.x, box.size.y);
-				
-				if (Meander_panelTheme==0)  // light theme
+				if (doPNGpanel)
 				{
-					std::shared_ptr<Image> lightPanelImage = APP->window->loadImage(asset::plugin(pluginInstance,"res/Meander-light.png"));
-					if (lightPanelImage) 
+					nvgBeginPath(args.vg);
+					nvgRect(args.vg, 0.0, 0.0, box.size.x, box.size.y);
+					
+					if (Meander_panelTheme==0)  // light theme
 					{
-						int height=0;
-						int width=0;
-						nvgImageSize(args.vg, lightPanelImage->handle, &width, &height);
-						NVGpaint nvgpaint=nvgImagePattern(args.vg, 0.0, 0.0, width, height, 0.0, lightPanelImage->handle, 1.0);
-						nvgFillPaint(args.vg, nvgpaint);
-						nvgFill(args.vg);
+						std::shared_ptr<Image> lightPanelImage = APP->window->loadImage(asset::plugin(pluginInstance,"res/Meander-light.png"));
+						if (lightPanelImage) 
+						{
+							int height=0;
+							int width=0;
+							nvgImageSize(args.vg, lightPanelImage->handle, &width, &height);
+							NVGpaint nvgpaint=nvgImagePattern(args.vg, 0.0, 0.0, width, height, 0.0, lightPanelImage->handle, 1.0);
+							nvgFillPaint(args.vg, nvgpaint);
+							nvgFill(args.vg);
+						}
 					}
-				}
-				else // dark theme
-				{
-					std::shared_ptr<Image> darkPanelImage = APP->window->loadImage(asset::plugin(pluginInstance,"res/Meander-dark.png"));
-					if (darkPanelImage) 
+					else // dark theme
 					{
-						int height=0;
-				        int width=0;
-						nvgImageSize(args.vg, darkPanelImage->handle, &width, &height);
-						NVGpaint nvgpaint=nvgImagePattern(args.vg, 0.0, 0.0, width, height, 0.0, darkPanelImage->handle, 1.0);
-						nvgFillPaint(args.vg, nvgpaint);
-						nvgFill(args.vg);
+						std::shared_ptr<Image> darkPanelImage = APP->window->loadImage(asset::plugin(pluginInstance,"res/Meander-dark.png"));
+						if (darkPanelImage) 
+						{
+							int height=0;
+							int width=0;
+							nvgImageSize(args.vg, darkPanelImage->handle, &width, &height);
+							NVGpaint nvgpaint=nvgImagePattern(args.vg, 0.0, 0.0, width, height, 0.0, darkPanelImage->handle, 1.0);
+							nvgFillPaint(args.vg, nvgpaint);
+							nvgFill(args.vg);
+						}
 					}
+								
+					nvgClosePath(args.vg);
 				}
-							
-				nvgClosePath(args.vg);
+
 			    Widget::draw(args);
 			    return;  // do not proceedurally draw panel 
 			}
@@ -9925,9 +9930,9 @@ struct MeanderWidget : ModuleWidget
 		//
 
 		// if in the browser, force a panel redraw per frame with the current panel theme
-		if (!module) {
-			DirtyEvent eDirty;
-			parent->parent->onDirty(eDirty);
+		if (!module) { 
+		//	DirtyEvent eDirty;  // this causes browser render problems
+		//	parent->parent->onDirty(eDirty);
 		}
 		else  // not in the browser
 		Widget::step();  // most modules do this rather than ModuleWidget::step()
